@@ -5,7 +5,7 @@ const LocalClock = ({ date, timezone, offset }) => {
     <div>
       <ClockDisplay
         date={date}
-        title="My Clock"
+        title={"My Clock"}
         timezone={timezone}
         offset={offset}
       />
