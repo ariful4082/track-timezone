@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 const TIMEZONE_OFFSET = {
   PST: -7 * 60,
   EST: -4 * 60,
-  EAT: +3 * 60,
+  EDT: -4 * 60,
+  BST: 1 * 60,
+  MST: -6 * 60,
 };
 
-const useClock = (timezone, offset = 0) => {
+const useClock = (timezone, offset) => {
   const [localDate, setLocalDate] = useState(null);
   const [localOffset, setLocalOffset] = useState(0);
   const [localTimezone, setLocalTimezone] = useState("");
@@ -31,20 +33,17 @@ const useClock = (timezone, offset = 0) => {
       } else {
         const newUtc = addMinutes(utc, -localOffset);
         const dateStrArr = newUtc.toUTCString().split(" ");
-        setLocalTimezone(dateStrArr.pop());
-
         setLocalDate(newUtc);
+        setLocalTimezone(dateStrArr.pop());
       }
     }
-  }, [utc]);
+  }, [utc, timezone, offset]);
 
   return {
     date: localDate,
     dateUTC: utc,
-    offset,
-    timezone,
-    localOffset,
-    localTimezone,
+    offset: offset || -localOffset,
+    timezone: timezone || localTimezone,
   };
 };
 
