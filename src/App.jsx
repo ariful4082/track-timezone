@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { generate } from "shortid";
 import ClockList from "./components/clockList";
 import LocalClock from "./components/localClock";
+import useEvents from "./hooks/useEvents";
 
 const LOCAL_CLOCK_INIT = {
   title: "My Clock",
@@ -13,6 +14,16 @@ const LOCAL_CLOCK_INIT = {
 function App() {
   const [localClock, setLocalClock] = useState({ ...LOCAL_CLOCK_INIT });
   const [clocks, setClocks] = useState([]);
+  const { getEvents, getEventsByClockId, addEvent, events } = useEvents();
+
+  useEffect(() => {
+    if (Object.keys(events).length === 0) {
+      addEvent({ title: "Test", clockId: "CLOCK-111" });
+    }
+    console.log("All Events Array", getEvents(true));
+    console.log("Event By Id", getEventsByClockId("CLOCK-111"));
+    console.log("All Events", getEvents());
+  }, [events]);
 
   // inCludes Local clock
   const updateLocalClock = (data) => {
@@ -42,6 +53,8 @@ function App() {
     const updatedClocks = clocks.filter((clock) => clock.id !== id);
     setClocks(updatedClocks);
   };
+
+  // Local Timer
 
   return (
     <div>
